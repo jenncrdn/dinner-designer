@@ -1,66 +1,73 @@
-# [team name] Design Document
+# Jenn's Design Document
 
 ## Instructions
 
-*Save a copy of this template for your team in the same folder that contains
-this template.*
-
-*Replace italicized text (including this text!) with details of the design you
-are proposing for your team project. (Your replacement text shouldn't be in
-italics)*
-
-*You should take a look at the example design document in the same folder as
-this template for more guidance on the types of information to capture, and the
-level of detail to aim for.*
-
-## *Project Title* Design
+## The Dinner Decider Design
 
 ## 1. Problem Statement
 
-*Explain clearly what problem you are trying to solve.*
+Each week I spend a couple hours working to plan our meals for the week. The 
+Dinner Decider will take that responsibility from me by creating a weekly meal 
+plan that suits everyone's preferences. It will pull 8 meals from the meals 
+database, allowing 1 chosen meal to be voted off by the family. This will free up
+time in my weekend to be spent on other activities. 
 
 
 ## 2. Top Questions to Resolve in Review
 
-*List the most important questions you have about your design, or things that
-you are still debating internally that you might like help working through.*
+List the most important questions you have about your design, or things that
+you are still debating internally that you might like help working through.
 
-1.   
-2.   
+1.  How do I attach photos to an object?   
+2.  What will I do when there is a tie on which meal to vote off?  
 3.  
 
 ## 3. Use Cases
 
-*This is where we work backwards from the customer and define what our customers
+This is where we work backwards from the customer and define what our customers
 would like to do (and why). You may also include use cases for yourselves, or
-for the organization providing the product to customers.*
+for the organization providing the product to customers.
 
-U1. *As a [product] customer, I want to `<result>` when I `<action>`*
+U1. As a customer, I want to receive 8 meals, fitting specific 
+parameters, when I ask the app to generate a meal plan.
 
-U2. *As a [product] customer, I want to view my grocery list when I log into the
-grocery list page*
+U2. As a customer, I want to view my meal plan when I log into the
+meal plan page.
     
-U3. ...
+U3. As a customer, I want to be able to vote for 1 meal to remove 
+from the weekly meal plan. 
+
+U4. As a customer, I want to be able to request a specific meal and 
+have it included in the generated weekly meal plan. 
 
 ## 4. Project Scope
 
-*Clarify which parts of the problem you intend to solve. It helps reviewers know
+Clarify which parts of the problem you intend to solve. It helps reviewers know
 what questions to ask to make sure you are solving for what you say and stops
 discussions from getting sidetracked by aspects you do not intend to handle in
-your design.*
+your design.
 
 ### 4.1. In Scope
 
-*Which parts of the problem defined in Sections 1 and 3 will you solve with this
-design?*
+Which parts of the problem defined in Sections 1 and 3 will you solve with this
+design?
+
+* Auto generating weekly meal plans. 
+* Allowing family members to vote off a meal. 
+* Allowing family members to view weekly meal plans. 
+* Allowing family members to request specific dinners. 
 
 ### 4.2. Out of Scope
 
-*Based on your problem description in Sections 1 and 3, are there any aspects
+Based on your problem description in Sections 1 and 3, are there any aspects
 you are not planning to solve? Do potential expansions or related problems occur
 to you that you want to explicitly say you are not worrying about now? Feel free
 to put anything here that you think your team can't accomplish in the unit, but
-would love to do with more time.*
+would love to do with more time.
+
+* It will not provide recipes. 
+* It will not provide grocery lists. 
+* It will not provide a ratings system yet. 
 
 # 5. Proposed Architecture Overview
 
@@ -75,15 +82,30 @@ reasonable. That is, why it represents a good data flow and a good separation of
 concerns. Where applicable, argue why this architecture satisfies the stated
 requirements.*
 
+I will use API Gateway and Lambda to create four endpoints (GenerateMealPlan, 
+ViewMealPlan, RequestAMeal, VoteOffAMeal). 
+
+I will store meals in a DynamoDB table where they will be chosen at random, checked
+to make sure they meet specific criteria and then added to an ArrayList of meal options
+for the week. 
+
 # 6. API
 
 ## 6.1. Public Models
 
-*Define the data models your service will expose in its responses via your
-*`-Model`* package. These will be equivalent to the *`PlaylistModel`* and
-*`SongModel`* from the Unit 3 project.*
+Define the data models your service will expose in its responses via your
+*`-Model`* package.
 
-## 6.2. *First Endpoint*
+```
+// MealModel
+String mealId; 
+String mealName;
+Enum protein; 
+Enum servedWith;      
+String imageURL; 
+```
+
+## 6.2. Create Weekly Meal Plan Endpoint
 
 *Describe the behavior of the first endpoint you will build into your service
 API. This should include what data it requires, what data it returns, and how it
@@ -96,19 +118,35 @@ your team before building it!)*
 *(You should have a separate section for each of the endpoints you are expecting
 to build...)*
 
-## 6.3 *Second Endpoint*
+* Accepts a `POST` request to `MealPlan`  
+* Accepts data to create a weekly meal plan. Returns a new ArrayList or Set of MealModel's. 
 
-*(repeat, but you can use shorthand here, indicating what is different, likely
-primarily the data in/out and error conditions. If the sequence diagram is
-nearly identical, you can say in a few words how it is the same/different from
-the first endpoint)*
+## 6.3 Get the Weekly Meal Plan Endpoint
+
+* Accepts a `GET` request to `MealPlan` 
+* Accepts nothing and returns the ArrayList of MealModel's. 
+
+## 6.4 Vote for a Meal Endpoint
+
+* Accepts a `POST` request to `MealPlan/id`
+* Accepts a string and returns a number
+
+## 6.5 Request a Meal Endpoint
+
+* Accepts a `POST` request to `MealPlan`
+* Accepts a String and returns string
 
 # 7. Tables
 
-*Define the DynamoDB tables you will need for the data your service will use. It
-may be helpful to first think of what objects your service will need, then
-translate that to a table structure, like with the *`Playlist` POJO* versus the
-`playlists` table in the Unit 3 project.*
+## 7.1. `Meals`
+
+```
+mealId // partition key, string
+mealName // string
+protein // string
+servedWith // string
+imageURL // string 
+```
 
 # 8. Pages
 
@@ -119,3 +157,8 @@ pages. It should be clear what the interactions will be on the page, especially
 where customers enter and submit data. You may want to accompany the mockups
 with some description of behaviors of the page (e.g. “When customer submits the
 submit-dog-photo button, the customer is sent to the doggie detail page”)*
+
+Users will have 4 options, View Menus, Request a Meal, Vote off a Meal, Generate 
+Meal Plan. Each of those options will take them to another page where they will be able 
+to view, submit their request, select a meal or generate the weekly plan. 
+images/example_design_document/Dinner Decider Mockup.pdf
