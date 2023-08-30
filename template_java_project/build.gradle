@@ -1,4 +1,6 @@
 plugins {
+    id 'org.springframework.boot' version '2.7.3'
+    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
     id 'java'
 }
 
@@ -6,7 +8,7 @@ repositories {
     mavenCentral()
 }
 
-tasks.withType(Checkstyle) {
+tasks.withType(Checkstyle).configureEach {
     reports {
         xml.enabled false
         html.enabled true
@@ -34,6 +36,12 @@ sourceSets {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
     implementation 'org.junit.jupiter:junit-jupiter:5.7.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
@@ -46,7 +54,7 @@ dependencies {
     implementation group: 'com.google.dagger', name: 'dagger', version: '2.15'
 
     implementation "com.google.dagger:dagger:2.15"
-    annotationProcessor"com.google.dagger:dagger-compiler:2.15"
+    annotationProcessor "com.google.dagger:dagger-compiler:2.15"
 
     // https://mvnrepository.com/artifact/org.testng/testng
     implementation group: 'org.testng', name: 'testng', version: '6.14.3'
@@ -59,9 +67,16 @@ dependencies {
     implementation 'com.amazonaws:aws-lambda-java-events:2.2.9'
     runtimeOnly 'com.amazonaws:aws-lambda-java-log4j2:1.2.0'
 
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-dynamodb
+    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.12.290'
+
+
+    // https://mvnrepository.com/artifact/com.github.derjust/spring-data-dynamodb
+    implementation 'com.github.derjust:spring-data-dynamodb:5.1.0'
+
 }
 
-task buildZip(type: Zip) {
+tasks.register('buildZip', Zip) {
     from compileJava
     from processResources
     into('./lib') {

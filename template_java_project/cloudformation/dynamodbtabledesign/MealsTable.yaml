@@ -10,3 +10,10 @@ Resources:
           "KeyType": "HASH"
       BillingMode: PAY_PER_REQUEST
       TableName: "Meals"
+      GlobalSecondaryIndexes:
+        - IndexName: "MealNameIndex"
+          KeySchema:
+            - AttributeName: "mealName"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: "KEYS_ONLY"

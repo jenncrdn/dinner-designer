@@ -1,6 +1,0 @@
-// Meals
-mealId // partition key, string
-mealName // string
-protein // string
-servedWith // string
-imageURL // string

@@ -118,22 +118,22 @@ your team before building it!)*
 *(You should have a separate section for each of the endpoints you are expecting
 to build...)*
 
-* Accepts a `POST` request to `MealPlan`  
+* Accepts a `POST` request to `java.MealPlan`  
 * Accepts data to create a weekly meal plan. Returns a new ArrayList or Set of MealModel's. 
 
 ## 6.3 Get the Weekly Meal Plan Endpoint
 
-* Accepts a `GET` request to `MealPlan` 
+* Accepts a `GET` request to `java.MealPlan` 
 * Accepts nothing and returns the ArrayList of MealModel's. 
 
 ## 6.4 Vote for a Meal Endpoint
 
-* Accepts a `POST` request to `MealPlan/id`
+* Accepts a `POST` request to `java.MealPlan/id`
 * Accepts a string and returns a number
 
 ## 6.5 Request a Meal Endpoint
 
-* Accepts a `POST` request to `MealPlan`
+* Accepts a `POST` request to `java.MealPlan`
 * Accepts a String and returns string
 
 # 7. Tables

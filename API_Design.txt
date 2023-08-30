@@ -1,0 +1,11 @@
+// CREATE
+endpoint:         /meals/{mealId}
+verb:
+description:
+query:            {
+
+                  }
+
+result (example): {
+
+                  }
