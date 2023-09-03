@@ -1,0 +1,384 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Dinner Designer",
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/mealplan": {
+      "get": {
+        "description": "This is used to view the weekly meal plan.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "items": {
+                      "$ref": "#/components/schemas/MealPlan"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "code": 500,
+                    "message": "Server Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/meals": {
+      "get": {
+        "description": "This is used to get meals that can be add to the meal plan",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "items": {
+                      "$ref": "#/components/schemas/Meal"
+                    },
+                    "example": {
+                      "mealId": "string",
+                      "mealName": "string",
+                      "imageURL": "string",
+                      "votes": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "code": 500,
+                    "message": "Server Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mealplan/request": {
+      "post": {
+        "description": "This is used to request a specific meal be added to the meal plan",
+        "parameters": [
+          {
+            "name": "mealId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "123"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Meal"
+                  },
+                  "example": {
+                    "mealId": "123",
+                    "mealName": "Chipotle Bowls",
+                    "imageURL": "www.google.com",
+                    "votes": "0"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "code": 500,
+                    "message": "Server Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mealplan/create": {
+      "post": {
+        "description": "This is used to generate meals for the week",
+        "parameters": [
+          {
+            "name": "numOfMeals",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 8,
+              "minimum": 1,
+              "maximum": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "items": {
+                      "$ref": "#/components/schemas/MealPlan"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid User Input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "code": 400,
+                    "message": "User Error"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "code": 500,
+                    "message": "Server Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mealplan/{mealId}/reject": {
+      "put": {
+        "description": "this is used to vote for a meal to remove from the meal plan",
+        "parameters": [
+          {
+            "name": "mealId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "items": {
+                      "$ref": "#/components/schemas/Meal"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mealplan/finialize": {
+      "post": {
+        "description": "Close voting and finialize the meal plan",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "items": {
+                      "$ref": "#/components/schemas/MealPlan"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "code": 500,
+                    "message": "Server Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mealplan/options": {
+      "get": {
+        "description": "This is used to get the meal options for the upcoming week",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "items": {
+                      "$ref": "#/components/schemas/MealPlan"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "example": {
+                    "code": 500,
+                    "message": "Server Error"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MealPlan": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "mealId": {
+              "type": "string"
+            },
+            "mealName": {
+              "type": "string"
+            },
+            "imageURL": {
+              "type": "string"
+            },
+            "votes": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "Meal": {
+        "type": "object",
+        "properties": {
+          "mealId": {
+            "type": "string"
+          },
+          "mealName": {
+            "type": "string"
+          },
+          "imageURL": {
+            "type": "string"
+          },
+          "votes": {
+            "type": "integer"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
