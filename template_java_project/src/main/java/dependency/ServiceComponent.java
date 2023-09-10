@@ -1,9 +1,7 @@
 package main.java.dependency;
 
 import dagger.Component;
-import main.java.activity.CreateMealOptionsActivity;
-import main.java.activity.CreateRequestActivity;
-import main.java.activity.UpdateMealOptionsActivity;
+import main.java.activity.*;
 
 import javax.inject.Singleton;
 
@@ -14,4 +12,13 @@ import javax.inject.Singleton;
 @Component(modules = DaoModule.class)
 public interface ServiceComponent {
 
+    GetMealPlanActivity provideGetMealPlanActivity();
+    GetAllMealsActivity provideGetAllMealsActivity();
+    CreateRequestActivity provideCreateRequestActivity();
+    CreateMealOptionsActivity provideCreateMealOptionsActivity();
+    UpdateMealOptionsActivity provideUpdateMealOptionsActivity();
+    GetMealOptionsActivity provideGetMealOptionsActivity();
+    UpdateMealVotesActivity provideUpdateMealVotesActivity();
+    CreateNewUserActivity provideCreateNewUserActivity();
+    GetLoginActivity provideGetLoginActivity();
 }

@@ -69,6 +69,10 @@ dependencies {
 
 }
 
+test {
+    useJUnitPlatform()
+}
+
 task buildZip(type: Zip) {
     from compileJava
     from processResources

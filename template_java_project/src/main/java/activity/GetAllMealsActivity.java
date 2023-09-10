@@ -5,7 +5,6 @@ import main.java.dao.models.Meal;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.List;
 
 public class GetAllMealsActivity {
     private MealDao mealDao;

@@ -1,0 +1,56 @@
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th {
+    background: #99ccff;
+}
+
+th, td {
+    padding: 6px;
+}
+
+h1 {
+    color: #B56576;
+}
+
+h2 {
+    color: white;
+}
+
+#page-wrap {
+    width: 80%;
+    margin: 0 auto;
+    background: #355070;
+    padding: 20px;
+}
+
+.requests {
+    color: EAAC8B;
+    width: 200px;
+    border-radius: 3px;
+    padding: 10px
+}
+
+.mealplan {
+    display: flex;
+    flex-direction: column;
+    color: EAAC8B;
+    width: 200px;
+    border-radius: 3px;
+    padding: 10px
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    color: EAAC8B;
+    width: 200px;
+    border-radius: 3px;
+    padding: 10px
+
+}

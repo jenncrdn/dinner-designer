@@ -4,6 +4,8 @@ import main.java.Protein;
 import main.java.ServedWith;
 import main.java.dao.MealDao;
 import main.java.dao.models.Meal;
+import main.java.dao.models.Option;
+import main.java.dao.models.Request;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -13,96 +15,109 @@ import java.util.Random;
 @Singleton
 public class CreateMealOptionsActivity {
     private MealDao mealDao;
-    private CreateRequestActivity requests;
-    private ArrayList<Meal> weeklyMealOptions;
-    private int numberOfMeals = 8;
+    private static ArrayList<Meal> weeklyMealOptions = new ArrayList<>();
+    private int numberOfMeals;
     private int chickenCount;
     private int pastaCount;
 
     @Inject
-    public CreateMealOptionsActivity(MealDao mealDao, CreateRequestActivity requests) {
+    public CreateMealOptionsActivity(MealDao mealDao) {
         this.mealDao = mealDao;
-        this.requests = requests;
     }
 
     public CreateMealOptionsActivity() {
+
     }
 
-    public ArrayList<Meal> getWeeklyMeals() {
-        if (weeklyMealOptions.isEmpty()) {
-            createWeeklyMeals();
-        }
-        return weeklyMealOptions;
+    public ArrayList<Option> getWeeklyMeals() {
+        return mealDao.getOptions();
     }
 
     public void createWeeklyMeals() {
         weeklyMealOptions = new ArrayList<>();
-        int numOfRequests = 0;
+        mealDao.removeOptions();
 
-        if (!requests.getRequestedMeals().isEmpty()) {
-            weeklyMealOptions.addAll(requests.getRequestedMeals());
-            requests.resetRequestedMeals();
-            numOfRequests = weeklyMealOptions.size();
+        ArrayList<Request> requests = mealDao.getRequests();
+        int numOfRequests = requests.size();
+        mealDao.removeRequests();
+
+        for (Request r : requests) {
+            Option option = new Option();
+            option.setMealId(r.getMealId());
+            mealDao.saveOptions(option);
+            weeklyMealOptions.add(mealDao.getMeal(r.getMealId()));
         }
 
-        for (int i = numOfRequests; i < numberOfMeals; ) {
-            Meal meal = mealDao.getMeal(Integer.toString(getRandomNumber()));
+        if (numOfRequests < numberOfMeals) {
+            for (int i = numOfRequests; i < numberOfMeals; ) {
+                Meal meal = mealDao.getMeal(Integer.toString(getRandomNumber()));
 
-            for (Meal m : weeklyMealOptions) {
-                if (m.equals(meal)) {
-                    break;
+                if (weeklyMealOptions.contains(meal)) {
+                    continue;
                 }
-            }
 
-            Protein protein = Protein.valueOf(meal.getProtein());
-            if (protein == Protein.CHICKEN) {
-                chickenCount++;
+                String protein = meal.getProtein();
+                String servedWith = meal.getServedWith();
+                boolean containsChicken;
+                boolean containsPasta;
+                try {
+                    containsChicken = protein.equalsIgnoreCase(String.valueOf(Protein.CHICKEN));
+                } catch (NullPointerException e) {
+                    containsChicken = false;
+                }
+
+                try {
+                    containsPasta = servedWith.equalsIgnoreCase(String.valueOf(ServedWith.PASTA));
+                } catch (NullPointerException e) {
+                    containsPasta = false;
+                }
+
                 int maxChicken = 2;
-                if (chickenCount > maxChicken) {
-                    chickenCount--;
-                    break;
-                }
-            }
-            ServedWith servedWith = ServedWith.valueOf(meal.getServedWith());
-            if (servedWith == ServedWith.PASTA) {
-                pastaCount++;
                 int maxPasta = 3;
-                if (pastaCount > maxPasta) {
-                    pastaCount--;
-                    break;
+                if ((containsChicken && chickenCount >= maxChicken) || (containsPasta && pastaCount >= maxPasta)) {
+                    continue;
                 }
+
+                if (containsChicken) {
+                    chickenCount++;
+                }
+
+                if (containsPasta) {
+                    pastaCount++;
+                }
+
+                weeklyMealOptions.add(meal);
+                i++;
+                Option option = new Option();
+                option.setMealId(meal.getMealId());
+                mealDao.saveOptions(option);
             }
-            weeklyMealOptions.add(meal);
-            i++;
         }
     }
 
-    private int getRandomNumber() {
+    public int getRandomNumber() {
         int tableSize = mealDao.getTableSize();
         Random random = new Random();
-        int randomNumber = random.nextInt();
-        return randomNumber % (tableSize) + 101;
+        int randomNumber = random.nextInt(100000);
+        int numToUse = (randomNumber % tableSize) + 101;
+        return numToUse;
     }
 
     public void setNumberOfMeals(int numberOfMeals) {
-        if (numberOfMeals > 0 && numberOfMeals < 10) {
+        if (numberOfMeals > 0 && numberOfMeals <= 10) {
             this.numberOfMeals = numberOfMeals;
-        }
-        throw new IndexOutOfBoundsException("Please select a number between 1 and 10");
-    }
-
-    public void resetMealOptions() {
-        for (Meal m : weeklyMealOptions) {
-            weeklyMealOptions.remove(m);
+        } else {
+            throw new IndexOutOfBoundsException("Please select a number between 1 and 10");
         }
     }
 
-    public ArrayList<Meal> handleCreatePlanRequest(final int numberOfMeals) {
+    public int getNumberOfMeals() {
+        return numberOfMeals;
+    }
+
+    public ArrayList<Meal> handleCreatePlanRequest(final Integer numberOfMeals) {
         setNumberOfMeals(numberOfMeals);
         createWeeklyMeals();
-        return weeklyMealOptions; }
-
-    public ArrayList<Meal> handleGetOptionsRequest() {
         return weeklyMealOptions;
     }
 }

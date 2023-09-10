@@ -1,29 +1,37 @@
 package main.java.dao.models;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 @DynamoDBTable(tableName = "Users")
 public class User {
-    private String userId;
     private String username;
+    private String password;
+    private boolean isAdmin = false;
 
-    @DynamoDBHashKey(attributeName = "userId")
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    @DynamoDBAttribute(attributeName = "username")
+    @DynamoDBHashKey(attributeName = "username")
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @DynamoDBAttribute(attributeName = "password")
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    @DynamoDBAttribute(attributeName = "isAdmin")
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.BOOL)
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }
