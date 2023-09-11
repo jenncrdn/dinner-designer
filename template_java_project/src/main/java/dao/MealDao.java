@@ -43,7 +43,12 @@ public class MealDao {
     }
     public Option getOption(String mealId) { return mapper.load(Option.class, mealId); }
     public void saveOptions(Option option) { mapper.save(option); }
-    public void removeOptions() { mapper.batchDelete(Option.class); }
+    public void removeOptions() {
+        ArrayList<Option> options = getOptions();
+        for (Option o : options) {
+            mapper.delete(o);
+        }
+    }
 
 
 
@@ -53,7 +58,13 @@ public class MealDao {
     }
 
     public void saveMealPlan(MealPlan mealPlan) { mapper.save(mealPlan); }
-    public void removeMealPlan() { mapper.batchDelete(MealPlan.class); }
+    public void removeMealPlan() {
+        ArrayList<MealPlan> mealPlans = getMealPlan();
+        for (MealPlan m : mealPlans) {
+            mapper.delete(m);
+        }
+
+    }
 
 
     public ArrayList<Request> getRequests() {
@@ -61,7 +72,12 @@ public class MealDao {
         return new ArrayList<>(requests);
     }
     public void saveRequests(Request request) { mapper.save(request); }
-    public void removeRequests() { mapper.batchDelete(Request.class); }
+    public void removeRequests() {
+        ArrayList<Request> requests = getRequests();
+        for (Request r : requests) {
+            mapper.delete(r);
+        }
+    }
 
     /**
      * Gets a meal by mealName.

@@ -1,5 +1,6 @@
 package main.java.dao.models;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
@@ -16,6 +17,8 @@ public class Option {
     public void setMealId(String mealId) {
         this.mealId = mealId;
     }
+
+    @DynamoDBAttribute(attributeName = "votes")
 
     public int getVotes() {
         return votes;

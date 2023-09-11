@@ -12,46 +12,47 @@ import java.util.ArrayList;
 public class UpdateMealOptionsActivity {
 
     private MealDao mealDao;
-    private Meal mostVotes;
+    private Option mostVotes;
+    private ArrayList<Option> options;
     private static final ArrayList<Meal> finalMealPlan = new ArrayList<>();
 
     @Inject
     public UpdateMealOptionsActivity(MealDao mealDao) {
         this.mealDao = mealDao;
+        options = mealDao.getOptions();
     }
 
     public UpdateMealOptionsActivity() {
     }
 
     private void setMostVotes() {
-        ArrayList<Option> options = mealDao.getOptions();
-        mostVotes = mealDao.getMeal(options.get(0).getMealId());
+        mostVotes = options.get(0);
         for (Option o : options) {
             if (o.getVotes() > mostVotes.getVotes()) {
-                mostVotes = mealDao.getMeal(o.getMealId());
+                mostVotes = o;
             }
-            if (o.getVotes() == mostVotes.getVotes()) {
-                throw new VotedOffMealTieException("We have a tie! " +
-                        mealDao.getMeal(o.getMealId()).getMealName() + " and " + mostVotes.getMealName());
-            }
+//            if (o.getVotes() == mostVotes.getVotes() && !o.getMealId().equals(mostVotes.getMealId())) {
+//                throw new VotedOffMealTieException("We have a tie! " +
+//                        mealDao.getMeal(o.getMealId()).getMealName() + " and " + mostVotes.getMealName());
+//            }
         }
     }
 
     private void removeMostVotes() {
         setMostVotes();
-        ArrayList<Option> meals = mealDao.getOptions();
-        meals.remove(mostVotes.getMealId());
+        options.remove(mostVotes);
+    }
+
+    public ArrayList<Meal> getFinalMealPlan() {
+        removeMostVotes();
         mealDao.removeMealPlan();
-        for (Option o : meals) {
+
+        for (Option o : options) {
             MealPlan mealPlan = new MealPlan();
             mealPlan.setMealId(o.getMealId());
             mealDao.saveMealPlan(mealPlan);
             finalMealPlan.add(mealDao.getMeal(o.getMealId()));
         }
-    }
-
-    public ArrayList<Meal> getFinalMealPlan() {
-        removeMostVotes();
         return finalMealPlan;
     }
     public ArrayList<Meal> handleRequest() {

@@ -13,9 +13,10 @@ public class CreateRequestActivity {
     private static final ArrayList<Meal> requestedMeals = new ArrayList<>();
     private MealDao mealDao;
 
-
     @Inject
-    public CreateRequestActivity(MealDao mealDao) {}
+    public CreateRequestActivity(MealDao mealDao) {
+        this.mealDao = mealDao;
+    }
 
 
     public ArrayList<Meal> getRequestedMeals() {
@@ -26,14 +27,12 @@ public class CreateRequestActivity {
         return requestedMeals;
     }
 
-    public void resetRequestedMeals() {
-        mealDao.removeRequests();
-    }
-
     public Meal handleRequest(final Meal meal) {
+        System.out.println(meal.getMealId());
         Request request = new Request();
         request.setMealId(meal.getMealId());
         mealDao.saveRequests(request);
+        System.out.println(request.getMealId());
         return meal;
     }
 }

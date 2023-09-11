@@ -72,7 +72,7 @@ public class CreateMealOptionsActivity {
                     containsPasta = false;
                 }
 
-                int maxChicken = 2;
+                int maxChicken = 1;
                 int maxPasta = 3;
                 if ((containsChicken && chickenCount >= maxChicken) || (containsPasta && pastaCount >= maxPasta)) {
                     continue;
