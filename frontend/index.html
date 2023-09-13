@@ -4,30 +4,21 @@
     <meta charset="utf-8"> <!-- Important: rapi-doc uses utf8 characters -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="module" src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
-    <script src="index.js"></script>
+    <script src="options.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="styles.css" media="screen">
     <title>The Dinner Designer</title>
-    <rapi-doc spec-url = "./api.json"> </rapi-doc>
-
 </head>
 <body>
 <div id="page-wrap">
     <h1>Welcome to the Dinner Designer!</h1>
-    <div class="requests">
-        <h2><a href="requests.html">Request a Dinner for Next Week</a></h2>
-<!--        <img src="&#128591;"-->
-    </div>
 
-    <div class="mealplan">
-        <h2><a href="mealplan.html">View This Week's Dinners</a></h2>
-<!--        <img src="&#127869;"-->
-    </div>
+    <button class="requests"><a href="requests.html">Request a Dinner for Next Week</a></button>
 
-    <div class="options">
-        <h2><a href="options.html">View Next Week's Dinner Options</a></h2>
-<!--        <img src="&#129300;"-->
-    </div>
+    <button class="mealplan"><a href="mealplan.html">View This Week's Dinners</a></button>
+
+    <button class="options"><a href="options.html">View Next Week's Dinner Options</a></button>
+
 </div>
 </body>
 </html>

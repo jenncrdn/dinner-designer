@@ -3,15 +3,48 @@
 <head>
     <meta charset="utf-8"> <!-- Important: rapi-doc uses utf8 characters -->
     <script type="module" src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
-    <script src="index.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
     <link rel="stylesheet" href="styles.css" media="screen">
     <title>Dinner Options</title>
+<!--    <rapi-doc spec-url = "./api.json"> </rapi-doc>-->
+
 </head>
 <body>
 <div id="page-wrap">
-    <rapi-doc spec-url = "./api.json"> </rapi-doc>
     <h1>Next Week's Dinner Options</h1>
+
+    <form id="number-of-meals-form">
+        <label>Number of Meals</label>
+        <label for="numOfMeals"></label><input type="number" required id="numOfMeals" placeholder="8" autofocus>
+        <br>
+
+        <input type="submit" id="create" value="Create">
+    </form>
+
+    <p>The Dinner Designer has decided your fate! Here are your options for next week's dinners.</p>
+
+    <ul id="meal-list"></ul>
+
+
+    <button id="meals[0]">Reject</button>
+    <button id="meals[1]">Gross</button>
+    <button id="meals[2]">Vote!</button>
+    <button id="meals[3]">Yuck</button>
+    <button id="meals[4]">Not Eating This</button>
+    <button id="meals[5]">Nope</button>
+    <button id="meals[6]">Ewww!</button>
+    <button id="meals[7]">No thank you</button>
+
+
+    <h1>Select the dinner you want to vote off!</h1>
+
+    <h2 id="reload">&#10227;</h2>
+    <h2 id="finalize">&#10003;</h2>
+
 </div>
+
+<script src="options.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 </body>
 </html>
