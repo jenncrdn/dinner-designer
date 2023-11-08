@@ -2,7 +2,7 @@
 
 ## Instructions
 
-## The Dinner Decider Design
+## The Dinner Designer Design
 
 ## 1. Problem Statement
 

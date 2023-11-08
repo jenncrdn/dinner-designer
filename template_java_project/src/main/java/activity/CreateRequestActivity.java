@@ -2,16 +2,14 @@ package main.java.activity;
 
 import main.java.dao.MealDao;
 import main.java.dao.models.Meal;
-import main.java.dao.models.Option;
 import main.java.dao.models.Request;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.ArrayList;
 
 public class CreateRequestActivity {
     private static final ArrayList<Meal> requestedMeals = new ArrayList<>();
-    private MealDao mealDao;
+    private final MealDao mealDao;
 
     @Inject
     public CreateRequestActivity(MealDao mealDao) {
